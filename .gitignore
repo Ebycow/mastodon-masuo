@@ -89,4 +89,4 @@ typings/
 databases/
 icons/
 *.js
-!/masuo.js
+!*.user.js
