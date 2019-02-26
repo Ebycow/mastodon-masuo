@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         Masuo
 // @namespace    https://ebycow.net/
-// @version      0.1
+// @version      1.0
 // @description  Devilish Miya :: Vie Aragaderro
+// @homepage     https://github.com/Ebycow/masuo/
 // @author       Ebycow <https://ebycow.net>
 // @match        https://mastodon.social/*
 // @grant        GM_xmlhttpRequest
