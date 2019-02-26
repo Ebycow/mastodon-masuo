@@ -1,0 +1,28 @@
+{
+  "name": "masuo",
+  "version": "1.0.0",
+  "description": "美味しさ宮城二段落ち 青釜カッターは海老焼き",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node index"
+  },
+  "author": "Ebycow",
+  "license": "",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "fast-xml-parser": "^3.12.13",
+    "nedb": "^1.8.0",
+    "request": "^2.88.0",
+    "typescript": "^3.3.3333",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/express": "^4.16.1",
+    "@types/nedb": "^1.8.7",
+    "@types/node": "^11.9.5",
+    "@types/request": "^2.48.1"
+  }
+}
