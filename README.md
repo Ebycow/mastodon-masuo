@@ -1,5 +1,5 @@
 # masuo
-MastodonのTLで、メディアファイルが拒否されているユーザのアイコンを表示できるようにするUserScript
+[Mastodon.social](https://mastodon.social)のタイムラインで、メディアファイルが拒否されているユーザのアイコンを表示できるようにするUserScript
 
 # usage
 ## backend
