@@ -8,11 +8,6 @@ import Datastore from "nedb";
 import { masuo } from "./anago";
 
 
-if (!fs.existsSync(path.resolve(__dirname, "icons"))) {
-    fs.mkdirSync(path.resolve(__dirname, "icons"));
-
-}
-
 type Person = { 
     feed:{ 
         logo: string 
@@ -20,10 +15,17 @@ type Person = {
 
 };
 
+type Acccount = {
+    host : string,
+    id : string
+    
+}
+
 type Avater = {
     host: string,
     id: string,
-    logo: string
+    sourceURL: string,
+    img: any
 
 }
 
@@ -44,15 +46,15 @@ async function getPerson(host: string, id: string): Promise<Person> {
 
 }
 
-async function getImage(url: string) {
+async function getImageFromUrl(url: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        request({ url : url, encoding : null }, (err, response, body) => {
+        request({ url : url, encoding : null }, (err, response, body: Buffer) => {
             if(err){
                 reject(err);
     
             }
 
-            resolve(body);
+            resolve(body.toString('base64'));
     
         });
 
@@ -60,7 +62,7 @@ async function getImage(url: string) {
 
 }
 
-async function getAvaters(id: string, host: string): Promise<Avater[]>{
+async function getAvatersFromDb(id: string, host: string): Promise<Avater[]>{
     return new Promise((resolve, reject) => {
         db.find({ id : id, host : host }, (err: Error, docs : Avater[]) => {
             if(err){
@@ -75,14 +77,36 @@ async function getAvaters(id: string, host: string): Promise<Avater[]>{
 
 }
 
-async function saveAvater(id: string, host: string, logoTitle: string) {
-    await new Promise((resolve, reject) => {
-        db.insert({
-            host : host,
+async function getAvater(id: string, host: string): Promise<Avater> { 
+    const avaters: Avater[] = await getAvatersFromDb(id, host);
+
+    if(avaters.length){
+        return avaters[0];
+
+
+    } else {
+        const person  = await getPerson(host, id);
+        const imgUrl = person.feed.logo
+        const image = await getImageFromUrl(imgUrl);
+
+        const newAvater: Avater = { 
             id : id,
-            logo : logoTitle
-        
-        }, (err) => {
+            host : host,
+            sourceURL : imgUrl,
+            img : image
+            
+        };
+
+        await saveAvater(newAvater);
+        return newAvater;
+
+    }
+
+}
+
+async function saveAvater(avater: Avater) {
+    await new Promise((resolve, reject) => {
+        db.insert(avater, (err) => {
             if(err){
                 reject(err);
 
@@ -98,62 +122,7 @@ async function saveAvater(id: string, host: string, logoTitle: string) {
 
 async function getAvaterImage(personId: string): Promise<string> {
     const [,id, host] = personId.split("@");
-    const pth = path.resolve(__dirname ,"icons", personId);
-    let imgPth = "";
-
-    const avaters: Avater[] = await getAvaters(id, host);
-
-    if(avaters.length <= 0){
-        await new Promise((resolve, reject) => {
-            fs.mkdir(pth, (err) => {
-                    resolve();
-
-            });
-
-        });
-
-        const person  = await getPerson(host, id);
-        const imgUrl = person.feed.logo
-        const image = await getImage(imgUrl);
-
-        const logoTitle = imgUrl.split('/').slice(-1)[0];
-
-        await new Promise((resolve, reject) => {
-            fs.writeFile( path.join(pth, logoTitle), image, { encoding : null } ,(err) => {
-                if(err) {
-                    reject(err);
-
-                } 
-
-                resolve();
-
-            });
-
-        });
-
-        await saveAvater(id, host, logoTitle);
-
-        imgPth = logoTitle;
-
-    } else {
-        imgPth = avaters[0].logo;
-
-    }
-
-    const img: string = await new Promise((resolve, reject) => {
-        fs.readFile(path.join(pth, imgPth), 'base64' , (err, data) => {
-            if(err){
-                reject(err);
-
-            }
-
-            resolve(data);
-    
-        });
-
-    });
-
-    return img;
+    return (await getAvater(id, host)).img;
 
 }
 
