@@ -20,7 +20,7 @@ type Person = {
 
 };
 
-type Avater=  {
+type Avater = {
     host: string,
     id: string,
     logo: string
@@ -75,6 +75,27 @@ async function getAvaters(id: string, host: string): Promise<Avater[]>{
 
 }
 
+async function saveAvater(id: string, host: string, logoTitle: string) {
+    await new Promise((resolve, reject) => {
+        db.insert({
+            host : host,
+            id : id,
+            logo : logoTitle
+        
+        }, (err) => {
+            if(err){
+                reject(err);
+
+            }
+
+            resolve();
+
+        });
+
+    }); 
+
+}
+
 async function getAvaterImage(personId: string): Promise<string> {
     const [,id, host] = personId.split("@");
     const pth = path.resolve(__dirname ,"icons", personId);
@@ -110,12 +131,7 @@ async function getAvaterImage(personId: string): Promise<string> {
 
         });
 
-        db.insert({
-            host : host,
-            id : id,
-            logo : logoTitle
-        
-        });
+        await saveAvater(id, host, logoTitle);
 
         imgPth = logoTitle;
 
