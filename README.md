@@ -7,7 +7,7 @@ docker build ./ -t masuo-backend
 ```
 
 ```
-docker run -itd --name=masuo-backend --publish=2243:2243 masuo-backend
+docker run -itd --name=masuo-backend --restart=always --volume=masuo:/mastodon-masuo/databases --publish=2243:2243 masuo-backend
 ```
 
 https://github.com/Ebycow/mastodon-masuo/raw/master/masuo.user.js
