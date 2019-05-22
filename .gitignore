@@ -90,3 +90,4 @@ databases/
 icons/
 *.js
 !*.user.js
+dist
