@@ -1,13 +1,17 @@
 # masuo
-美味しさ宮城二段落ち　青釜カッターは海老焼き
+MastodonのTLで、メディアファイルが拒否されているユーザのアイコンを表示できるようにするUserScript
 
 # usage
+## backend
+スクリプトはバックエンドのサーバにユーザID(ex. ebycow@mastodon.social)を問い合わせ、画像をキャッシュしながら取得します。
+
+デプロイ用Dockerfileがあります。
 ```
 docker build ./ -t masuo-backend
 ```
-
 ```
 docker run -itd --name=masuo-backend --restart=always --volume=masuo:/mastodon-masuo/databases --publish=2243:2243 masuo-backend
 ```
 
-https://github.com/Ebycow/mastodon-masuo/raw/master/masuo.user.js
+## frontend
+[TamperMonkey](https://www.tampermonkey.net/) をインストールした後、 https://github.com/Ebycow/mastodon-masuo/raw/master/masuo.user.js を開いて下さい。  
