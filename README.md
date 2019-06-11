@@ -7,7 +7,7 @@
 
 デプロイ用Dockerfileがあります。
 ```
-docker build ./ -t masuo-backend
+docker build git@github.com:Ebycow/mastodon-masuo.git -t masuo-backend
 ```
 ```
 docker run -itd --name=masuo-backend --restart=always --volume=masuo:/mastodon-masuo/databases --publish=2243:2243 masuo-backend
